@@ -1,5 +1,5 @@
 ---
-- name: Setup Jenkins with Terraform and Ansible
+- name: Setup Jenkins Server with Terraform and Ansible
   hosts: jenkins
   become: true
   tasks:

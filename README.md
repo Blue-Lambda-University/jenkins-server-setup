@@ -22,6 +22,8 @@ Provisioning is handled via an [Ansible](https://docs.ansible.com/) playbook tha
 - Jenkins server must allow port **22 (SSH)** and **8080 (Jenkins)**
 ```bash
   sudo apt install ansible
+  brew install ansible
+  yum install ansible
 ```
 
 ---
@@ -54,7 +56,7 @@ Provisioning is handled via an [Ansible](https://docs.ansible.com/) playbook tha
 ## Run the Playbook
 Run this from the project root:
 ```angular2html
-ansible-playbook -i inventory.ini playbook.yml
+ansible-playbook -i inventory.ini playbook.yml -vvv
 ```
 This will:
 - Upload setup.sh to the server
