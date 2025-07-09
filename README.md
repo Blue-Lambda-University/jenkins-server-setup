@@ -28,11 +28,22 @@ Provisioning is handled via an [Ansible](https://docs.ansible.com/) playbook tha
 
 ## Configuration
 
-### 1. Edit `inventory.ini`
+### 1. Edit `inventory.ini` based on your OS
 
 ```ini
+;Ubuntu:
 [jenkins]
 <your-server-ip> ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/your-key.pem
+```
+```ini
+;Amazon Linux EC2:
+[jenkins]
+<your-server-ip> ansible_user=ec2-user ansible_ssh_private_key_file=~/.ssh/your-key.pem
+```
+```ini
+;RHEL/CentOS:
+[jenkins]
+<your-server-ip> ansible_user=centos ansible_ssh_private_key_file=~/.ssh/your-key.pem
 ```
 - Replace <your-server-ip> with your actual public IP
 - Use the correct ansible_user (ubuntu, ec2-user, etc.)
