@@ -8,6 +8,8 @@ It installs:
 - ✅ [Jenkins](https://www.jenkins.io/)
 - ✅ [Terraform](https://www.terraform.io/)
 - ✅ [Ansible](https://www.ansible.com/)
+- ✅ [Docker](https://www.ansible.com/)
+- ✅ [Docker Compose](https://www.ansible.com/)
 - ✅ Core Jenkins plugins (including Job DSL, without seed job auto-creation)
 
 Provisioning is handled via an [Ansible](https://docs.ansible.com/) playbook that pushes and runs a universal `setup.sh` script.

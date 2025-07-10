@@ -9,23 +9,51 @@ DISTRO=$ID
 echo "Detected OS: $DISTRO"
 
 # ------------------------------
-# Install System Dependencies
+# Install System Dependencies + Docker + Docker Compose
 # ------------------------------
 case "$DISTRO" in
     ubuntu|debian)
         echo "[+] Installing dependencies for Ubuntu/Debian"
         sudo apt-get update
         sudo apt-get install -y gnupg curl unzip software-properties-common git openjdk-17-jdk lsb-release
+
+        echo "[+] Installing Docker and Docker Compose"
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo usermod -aG docker $USER
         ;;
     amzn|amazon)
         echo "[+] Installing dependencies for Amazon Linux"
         sudo yum update -y
         sudo yum install -y unzip curl git java-17-openjdk
+
+        echo "[+] Installing Docker and Docker Compose"
+        sudo yum install -y docker
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        sudo usermod -aG docker $USER
+
+        DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+        mkdir -p $DOCKER_CONFIG/cli-plugins
+        curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
         ;;
     centos|rhel)
         echo "[+] Installing dependencies for CentOS/RHEL"
         sudo yum update -y
         sudo yum install -y epel-release unzip curl git java-17-openjdk
+
+        echo "[+] Installing Docker and Docker Compose"
+        sudo yum install -y yum-utils
+        sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+        sudo yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        sudo usermod -aG docker $USER
         ;;
     *)
         echo "[-] Unsupported OS: $DISTRO"
@@ -99,7 +127,6 @@ def instance = Jenkins.getInstance()
 def pluginManager = instance.pluginManager
 def updateCenter = instance.updateCenter
 
-// Refresh plugin metadata
 updateCenter.updateAllSites()
 
 def plugins = [
@@ -156,3 +183,9 @@ echo "Jenkins setup complete!"
 echo "Access Jenkins at: http://<your-server-ip>:8080"
 echo "Initial Admin Password:"
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+# ------------------------------
+# Reload Docker Group for Current Session
+# ------------------------------
+#echo "Reloading docker group permissions..."
+#newgrp docker
