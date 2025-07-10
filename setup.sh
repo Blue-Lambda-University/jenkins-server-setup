@@ -64,7 +64,7 @@ esac
 # ------------------------------
 # Install Terraform
 # ------------------------------
-echo "Installing Terraform..."
+echo "[+] Installing Terraform..."
 if [[ "$DISTRO" == "ubuntu" || "$DISTRO" == "debian" ]]; then
     curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
@@ -79,7 +79,7 @@ fi
 # ------------------------------
 # Install Ansible
 # ------------------------------
-echo "Installing Ansible..."
+echo "[+] Installing Ansible..."
 if [[ "$DISTRO" == "ubuntu" || "$DISTRO" == "debian" ]]; then
     sudo add-apt-repository --yes --update ppa:ansible/ansible
     sudo apt-get install -y ansible
@@ -93,7 +93,7 @@ fi
 # ------------------------------
 # Install Jenkins
 # ------------------------------
-echo "Installing Jenkins..."
+echo "[+] Installing Jenkins..."
 if [[ "$DISTRO" == "ubuntu" || "$DISTRO" == "debian" ]]; then
     curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
     echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | \
@@ -109,14 +109,14 @@ fi
 # ------------------------------
 # Enable and Start Jenkins
 # ------------------------------
-echo "Starting Jenkins service..."
+echo "[+] Starting Jenkins service..."
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
 # ------------------------------
 # Jenkins Plugin Init Script
 # ------------------------------
-echo "Creating Jenkins plugin init script..."
+echo "[+] Creating Jenkins plugin init script..."
 sudo mkdir -p /var/lib/jenkins/init.groovy.d
 
 cat <<'EOF' | sudo tee /var/lib/jenkins/init.groovy.d/install-plugins.groovy
