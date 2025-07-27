@@ -145,7 +145,8 @@ def plugins = [
     "scm-api",
     "branch-api",
     "credentials",
-    "structs"
+    "structs",
+    "envinject"
 ]
 
 def installed = false
